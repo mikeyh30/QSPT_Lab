@@ -5,29 +5,19 @@ TomoData_Xpure = importdata('TomoData_Xpure.mat');
 TomoData_Ypure = importdata('TomoData_Ypure.mat');
 TomoData_Zpure = importdata('TomoData_Zpure.mat');
 
-%%
-
 
 %%
 data = TomoData_Xdeco;
-figure
+figure;
 for i = 1:2;
-    subplot(1,2,i)
-    plot(data(:,1),data(:,1+i))
+    subplot(1,2,i);
+    plot(data(:,1),data(:,1+i));
 end
 
-rx = trapz(data(5000:15000,2));
-ry = trapz(data(5000:15000,3));
-rz = trapz(data(25000:35000,2));
-r = sqrt(rx^2+ry^2+rz^2);
-rx = rx/r;
-ry = ry/r;
-rz = rz/r;
-rho = 
-
+rho = densityMatData(data);
 
 %%
-figure
+figure;
 for i = 1:8;
     subplot(2,4,i);
     plot(example_GARII_dataset.xdata,mean(example_GARII_dataset.dataQ(:,1,i,:),4));
