@@ -28,8 +28,21 @@ rho = densityMat(rxdeco,rydeco,rzdeco);
 figure;
 for i = 1:8;
     subplot(2,4,i);
-    plot(example_GARII_dataset.xdata,mean(example_GARII_dataset.dataQ(:,1,i,:),4));
+    plot(example_GARII_dataset.xdata,mean(example_GARII_dataset.dataI(:,1,i,:),4));
 end
 
 %% Quantum Process Tomography
-% I & Q are like rx and ry
+% First we need to find the integration bin:
+starttime1 = 1.1e-5;
+endtime1   = 3.0e-5;
+starttime2 = 9.1e-5;
+endtime2   = 1.1e-4;
+bintimes = binIntegrationTimes(example_GARII_dataset.xdata, starttime1, endtime1, starttime2, endtime2);
+% Now we integrate to find rx, ry, and rz
+rx = trapz(mean(example_GARII_dataset.dataI(bintimes(1):bintimes(2),1,5,:),4));
+ry = trapz(mean(example_GARII_dataset.dataI(bintimes(1):bintimes(2),1,7,:),4));
+rz = trapz(mean(example_GARII_dataset.dataI(bintimes(3):bintimes(4),1,1,:),4));
+
+
+
+
