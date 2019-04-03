@@ -1,4 +1,4 @@
-%%
+%% Load data
 example_GARII_dataset = importdata('example_GARII_dataset.mat');
 TomoData_Xdeco = importdata('TomoData_Xdeco.mat');
 TomoData_Xpure = importdata('TomoData_Xpure.mat');
@@ -6,7 +6,7 @@ TomoData_Ypure = importdata('TomoData_Ypure.mat');
 TomoData_Zpure = importdata('TomoData_Zpure.mat');
 
 
-%%
+%% Visualise state data
 data = TomoData_Xdeco;
 figure;
 for i = 1:2;
@@ -14,7 +14,7 @@ for i = 1:2;
     plot(data(:,1),data(:,1+i));
 end
 
-%%
+%% Quantum State Tomography
 rx = trapz(TomoData_Xpure(5000:15000,2));
 ry = trapz(TomoData_Ypure(5000:15000,3));
 rz = trapz(TomoData_Zpure(25000:35000,2));
@@ -24,11 +24,12 @@ rzdeco = trapz(TomoData_Xdeco(25000:35000,2))/rz;
 
 rho = densityMat(rxdeco,rydeco,rzdeco);
 
-
-%%
+%% Visualise GARII data
 figure;
 for i = 1:8;
     subplot(2,4,i);
     plot(example_GARII_dataset.xdata,mean(example_GARII_dataset.dataQ(:,1,i,:),4));
 end
 
+%% Quantum Process Tomography
+% I & Q are like rx and ry
