@@ -25,10 +25,15 @@ rzdeco = trapz(TomoData_Xdeco(25000:35000,2))/rz;
 rho = densityMat(rxdeco,rydeco,rzdeco);
 
 %% Visualise GARII data
+% Add -1e-3 to normalise correctly, maybe remove?
+offsetI = -3.0e-3;
+offsetQ = -1.2e-3;
 figure;
+suptitle('GARII: I=red, Q=blue')
 for i = 1:8;
     subplot(2,4,i);
-    plot(example_GARII_dataset.xdata,mean(example_GARII_dataset.dataQ(:,1,i,:),4));
+    plot(example_GARII_dataset.xdata,mean(example_GARII_dataset.dataI(:,1,i,:)+offsetI,4),'r',...
+        example_GARII_dataset.xdata,mean(example_GARII_dataset.dataQ(:,1,i,:)+offsetQ,4),'b');
 end
 
 %% Quantum Process Tomography
@@ -39,17 +44,17 @@ starttime2 = 9.1e-5;
 endtime2   = 1.1e-4;
 bintimes = binIntegrationTimes(example_GARII_dataset.xdata, starttime1, endtime1, starttime2, endtime2);
 % Now we integrate to find rx, ry, and rz
-% Add -1e-3 to normalise correctly, maybe remove?
-rz = trapz(mean(example_GARII_dataset.dataQ(bintimes(3):bintimes(4),1,1,:)-1e-3,4));
-rzp= trapz(mean(example_GARII_dataset.dataQ(bintimes(3):bintimes(4),1,3,:)-1e-3,4));
-rx = trapz(mean(example_GARII_dataset.dataQ(bintimes(1):bintimes(2),1,5,:)-1e-3,4));
-ry = trapz(mean(example_GARII_dataset.dataI(bintimes(1):bintimes(2),1,7,:)-1e-3,4));
+rz = trapz(mean(example_GARII_dataset.dataQ(bintimes(3):bintimes(4),1,1,:)+offsetQ,4));
+rzp= trapz(mean(example_GARII_dataset.dataQ(bintimes(3):bintimes(4),1,3,:)+offsetQ,4));
+rx = trapz(mean(example_GARII_dataset.dataI(bintimes(1):bintimes(2),1,5,:)+offsetI,4));
+ry = trapz(mean(example_GARII_dataset.dataQ(bintimes(1):bintimes(2),1,7,:)+offsetQ,4));
 
-rho1       = densityMatGARII(rz,rz,rz,bintimes,example_GARII_dataset,2);
-rho4       = densityMatGARII(rzp,rzp,rzp,bintimes,example_GARII_dataset,4);
-plusplus   = densityMatGARII(rx,rx,rx,bintimes,example_GARII_dataset,6);
-minusminus = densityMatGARII(ry,ry,ry,bintimes,example_GARII_dataset,8);
+rho1       = densityMatGARII(rx,ry,rz,bintimes,example_GARII_dataset,2, offsetI, offsetQ);
+rho4       = densityMatGARII(rx,ry,rz,bintimes,example_GARII_dataset,4, offsetI, offsetQ);
+plusplus   = densityMatGARII(rx,ry,rz,bintimes,example_GARII_dataset,6, offsetI, offsetQ);
+minusminus = densityMatGARII(rx,ry,rz,bintimes,example_GARII_dataset,8, offsetI, offsetQ);
 
+%James thinks we shoudl swap 2 and 3 around.
 rho2 = plusplus - 1i*minusminus - 0.5*(1-1i)*(rho1+rho4);
 rho3 = plusplus + 1i*minusminus - 0.5*(1+1i)*(rho1+rho4);
 
@@ -57,6 +62,7 @@ lambda = 0.5*[1,0,0,1;0,1,1,0;0,1,-1,0;1,0,0,-1];
 
 chi = lambda*[rho1,rho2;rho3,rho4]*lambda;
 
+figure;
 bar3(chi)
 
 
