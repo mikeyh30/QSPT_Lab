@@ -55,8 +55,8 @@ plusplus   = densityMatGARII(rx,ry,rz,bintimes,example_GARII_dataset,6, offsetI,
 minusminus = densityMatGARII(rx,ry,rz,bintimes,example_GARII_dataset,8, offsetI, offsetQ);
 
 %James thinks we shoudl swap 2 and 3 around.
-rho2 = plusplus - 1i*minusminus - 0.5*(1-1i)*(rho1+rho4);
-rho3 = plusplus + 1i*minusminus - 0.5*(1+1i)*(rho1+rho4);
+rho3 = plusplus - 1i*minusminus - 0.5*(1-1i)*(rho1+rho4);
+rho2 = plusplus + 1i*minusminus - 0.5*(1+1i)*(rho1+rho4);
 
 lambda = 0.5*[1,0,0,1;0,1,1,0;0,1,-1,0;1,0,0,-1];
 
