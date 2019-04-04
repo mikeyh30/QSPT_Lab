@@ -54,7 +54,7 @@ rho4       = densityMatGARII(rx,ry,rz,bintimes,example_GARII_dataset,4, offsetI,
 plusplus   = densityMatGARII(rx,ry,rz,bintimes,example_GARII_dataset,6, offsetI, offsetQ);
 minusminus = densityMatGARII(rx,ry,rz,bintimes,example_GARII_dataset,8, offsetI, offsetQ);
 
-%James thinks we shoudl swap 2 and 3 around.
+%James thinks we shoudl swap 2 and 3 around. He was right
 rho3 = plusplus - 1i*minusminus - 0.5*(1-1i)*(rho1+rho4);
 rho2 = plusplus + 1i*minusminus - 0.5*(1+1i)*(rho1+rho4);
 
@@ -62,7 +62,18 @@ lambda = 0.5*[1,0,0,1;0,1,1,0;0,1,-1,0;1,0,0,-1];
 
 chi = lambda*[rho1,rho2;rho3,rho4]*lambda;
 
+%% Plot QPT
 figure;
-bar3(chi)
+h = bar3(chi);
+title('Chi');
+hh = get(h(3),'parent');
+set(hh,'yticklabel',['I';'X';'Y';'Z']);
+set(hh,'xticklabel',['I';'X';'Y';'Z']);
+for k = 1:length(h)
+    zdata = h(k).ZData;
+    h(k).CData = zdata;
+    h(k).FaceColor = 'interp';
+end
+colorbar
 
 
