@@ -64,16 +64,23 @@ chi = lambda*[rho1,rho2;rho3,rho4]*lambda;
 
 %% Plot QPT
 figure;
-h = bar3(chi);
-title('Chi');
-hh = get(h(3),'parent');
-set(hh,'yticklabel',['I';'X';'Y';'Z']);
-set(hh,'xticklabel',['I';'X';'Y';'Z']);
-for k = 1:length(h)
-    zdata = h(k).ZData;
-    h(k).CData = zdata;
-    h(k).FaceColor = 'interp';
+chi1 = real(chi);
+chi1(:,:,2) = imag(chi);
+titles = {'real(chi)','imag(chi)'};
+for j = 1:2
+    subplot(1,2,j);
+    h = bar3(chi1(:,:,j));
+    hh = get(h(3),'parent');
+    set(hh,'yticklabel',['I';'X';'Y';'Z']);
+    set(hh,'xticklabel',['I';'X';'Y';'Z']);
+    for k = 1:length(h)
+        zdata = h(k).ZData;
+        h(k).CData = zdata;
+        h(k).FaceColor = 'interp';
+    end
+    title(titles(j));
+    colorbar
 end
-colorbar
+suptitle('Chi');
 
 
